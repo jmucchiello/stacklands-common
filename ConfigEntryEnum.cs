@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace DifficultyModNS
+namespace CommonModNS
 {
     public class ConfigEntryEnum<T> : ConfigEntryModalHelper where T : Enum
     {
@@ -23,7 +23,7 @@ namespace DifficultyModNS
         public string popupMenuTitleText; // the title bar text of the popup screen
         public string popupMenuHelpText; // the help text that appears below the title bar text
 
-        public string CloseButtonText = null; // if null, no close button is created
+        public string CloseButtonTextTerm = null; // if null, no close button is created
         public Color currentValueColor = Color.black;
 
         public virtual T DefaultValue { get => (T)(object)defaultValue; set => defaultValue = (int)(object)value; }
@@ -93,7 +93,7 @@ namespace DifficultyModNS
             if (GameCanvas.instance.ModalIsOpen) return;
             ModalScreen.instance.Clear();
             popup = ModalScreen.instance;
-            popup.SetTexts(popupMenuTitleText, popupMenuHelpText);
+            popup.SetTexts(I.Xlat(popupMenuTitleText), I.Xlat(popupMenuHelpText));
             foreach (T t in Enum.GetValues(typeof(T)))
             {
                 T thisEntry = t; // so the delegate grabs the correct value, not the loop variable
@@ -111,9 +111,9 @@ namespace DifficultyModNS
                     }
                 };
             }
-            if (CloseButtonText != null)
+            if (CloseButtonTextTerm != null)
             {
-                CustomButton btnClose = DefaultButton(ModalScreen.instance.ButtonParent, RightAlign(CloseButtonText));
+                CustomButton btnClose = DefaultButton(ModalScreen.instance.ButtonParent, RightAlign(I.Xlat(CloseButtonTextTerm)));
                 btnClose.Clicked += CloseMenu;
             }
             GameCanvas.instance.OpenModal();
@@ -121,7 +121,7 @@ namespace DifficultyModNS
 
         public override void SetDefaults()
         {
-            BoxedValue = DefaultValue;
+            Config.Data[Name] = content = defaultValue;
             anchor.TextMeshPro.text = onDisplayAnchorText != null ? onDisplayAnchorText() : UI.GetName();
             anchor.TooltipText = onDisplayAnchorTooltip != null ? onDisplayAnchorTooltip() : UI.GetTooltip();
         }
