@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
-using CommonModNS;
 
 namespace CommonModNS
 {
@@ -66,24 +65,23 @@ namespace CommonModNS
         }
     }
 
-    public class ConfigEmtySpace : ConfigEntryBase
+    public class ConfigEmptySpace : ConfigEntryBase
     {
-        private RectTransform spacer1, spacer2;
         public override object BoxedValue { get => new object(); set => _ = value; }
 
-        public ConfigEmtySpace(ConfigFile Config)
+        public ConfigEmptySpace(ConfigFile Config)
         {
-            Name = "none";
+            Name = "__ConfigEmptySpace__";
             ValueType = typeof(object);
-            Config.Entries.Add(this);
             UI = new ConfigUI()
             {
                 Hidden = true,
                 OnUI = delegate {
-                    spacer1 = UnityEngine.Object.Instantiate(I.MOS.SpacerPrefab, I.MOS.ButtonsParent);
-                    spacer2 = UnityEngine.Object.Instantiate(I.MOS.SpacerPrefab, I.MOS.ButtonsParent);
+                    _ = UnityEngine.Object.Instantiate(I.MOS.SpacerPrefab, I.MOS.ButtonsParent);
+                    _ = UnityEngine.Object.Instantiate(I.MOS.SpacerPrefab, I.MOS.ButtonsParent);
                 }
             };
+            Config.Entries.Add(this);
         }
 
     }

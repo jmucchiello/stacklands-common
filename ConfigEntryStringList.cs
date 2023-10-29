@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace DifficultyModNS
+namespace CommonModNS
 {
     public class ConfigEntryStringList : ConfigEntryModalHelper 
     {
