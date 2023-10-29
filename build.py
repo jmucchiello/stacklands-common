@@ -6,14 +6,16 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 import json
 
+print ("Don't build this.")
+exit(0)
+
 # ----- CONFIGURE THESE -----
-SYNC_FOLDERS = ["Blueprints", "Boosterpacks", "Cards", "Icons", "Sounds"] # folders to be synced, such as Cards, Blueprints, Icons, etc.
-COPY_FILES = ["manifest.json", "localization.tsv", "workfile.txt", "icon.png"] # individual files to copy, such as manifest.json, localization.tsv, etc. (the mod dll is copied automatically)
+#SYNC_FOLDERS = ["Blueprints", "Boosterpacks", "Cards", "Icons", "Sounds"] # folders to be synced, such as Cards, Blueprints, Icons, etc.
+#COPY_FILES = ["manifest.json", "localization.tsv", "workfile.txt", "icon.png"] # individual files to copy, such as manifest.json, localization.tsv, etc. (the mod dll is copied automatically)
 MODS_ROOT = Path(os.environ["userprofile"]) / Path("AppData/LocalLow/sokpop/Stacklands/Mods") # windows only, can be hardcoded with the below line instead
-# MODS_ROOT = Path("C:/Users/cyber/AppData/LocalLow/sokpop/Stacklands/Mods").resolve()
+#MODS_ROOT = Path("C:/Users/cyber/AppData/LocalLow/sokpop/Stacklands/Mods").resolve()
 
 MOD_BIN = Path("./bin/Debug/netstandard2.1").resolve()
-
 
 def sync_folder(src: Path, dst: Path):
     for file in dst.glob("**/*"):
@@ -56,19 +58,12 @@ if DLL_NAME.lower() == "examplemod.dll":
     print("Did you forget to rename the DLL in the project settings?")
     exit(1);
 
-# copy dll
-MOD_PATH.mkdir(exist_ok=True)
-shutil.copyfile(MOD_DLL, MOD_PATH / f"{DLL_NAME}")
+for file in MODS_ROOT.glob("./*"):
+    if (file / ".").is_dir:
+        try:
+            print("Copied to " +  f"{file / DLL_NAME}")
+            shutil.copyfile(MOD_DLL, file / DLL_NAME)
+        except:
+            print("Can't create " +  f"{file / DLL_NAME}")
 
-# copy files
-for file in COPY_FILES:
-    try:
-        shutil.copyfile(file, MOD_PATH / file)
-    except FileNotFoundError:
-        print(f"No such file: '{file}'")
-
-# copy folders
-print("syncing folders..")
-for folder in SYNC_FOLDERS:
-    sync_folder(Path(folder), MOD_PATH / folder)
-
+exit(1);
