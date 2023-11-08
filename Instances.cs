@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Reflection;
+﻿using System.Reflection;
+using System.Diagnostics;
 
 namespace CommonModNS
 {
@@ -29,6 +27,8 @@ namespace CommonModNS
             if (xlat == "---MISSING---")
             {
                 Log($"XLAT {termId} {xlat}");
+                StackTrace trace = new StackTrace();
+                if (trace != null) Log($"{trace.GetFrame(1)?.GetMethod()}/{trace.GetFrame(2)?.GetMethod()}/{trace.GetFrame(3)?.GetMethod()}");
                 return null;
             }
             return xlat;
@@ -40,7 +40,7 @@ namespace CommonModNS
          * If you declare this in your Mod class:
          *      public static void Log(string msg) => Instance?.Logger.Log(msg);
          * This code will find it and make I.Log call your Log function. And then you can copy this file
-         * into any mod and the I.Log function will automatically work with you having to rename how you find the instance to the mod.
+         * into any mod and the I.Log function will automatically work without you having to rename how you find the instance to the mod.
          */
         static I()
         {
