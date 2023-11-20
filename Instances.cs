@@ -23,15 +23,22 @@ namespace CommonModNS
         }
         public static string Xlat(string termId, params LocParam[] terms)
         {
-            string xlat = terms.Length > 0 ? SokLoc.Translate(termId, terms) : SokLoc.Translate(termId);
-            if (xlat == "---MISSING---")
+            if (termId == null)
             {
-                Log($"XLAT {termId} {xlat}");
-                StackTrace trace = new StackTrace();
-                if (trace != null) Log($"{trace.GetFrame(1)?.GetMethod()}/{trace.GetFrame(2)?.GetMethod()}/{trace.GetFrame(3)?.GetMethod()}");
-                return null;
+                Log("XLAT TermId is null");
             }
-            return xlat;
+            else
+            {
+                string xlat = terms != null && terms.Length > 0 ? SokLoc.Translate(termId, terms) : SokLoc.Translate(termId);
+                if (xlat != "---MISSING---")
+                {
+                    return xlat; // success
+                }
+                Log($"XLAT {termId} {xlat}");
+            }
+            StackTrace trace = new StackTrace();
+            if (trace != null) Log($"{trace.GetFrame(1)?.GetMethod()}/{trace.GetFrame(2)?.GetMethod()}/{trace.GetFrame(3)?.GetMethod()}");
+            return null;
         }
 
         private static MethodInfo log;
