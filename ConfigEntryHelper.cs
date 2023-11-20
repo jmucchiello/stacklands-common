@@ -80,6 +80,17 @@ namespace CommonModNS
             };
             Config.Entries.Add(this);
         }
+    }
 
+    public class ConfigResetDefaults : ConfigFreeText
+    {
+        public ConfigResetDefaults(ConfigFile config, Action OnReset)
+            : base("reset", config, "savehelper_reset", "savehelper_reset_tooltip")
+        {
+            TextAlign = TextAlign.Right;
+            Clicked += delegate (ConfigEntryBase _, CustomButton _) {
+                OnReset?.Invoke();
+            };
+        }
     }
 }
