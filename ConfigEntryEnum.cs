@@ -25,6 +25,7 @@ namespace CommonModNS
 
         public string CloseButtonTextTerm = null; // if null, no close button is created
         public Color currentValueColor = Color.black;
+        public int TextSize = 0;
 
         public virtual T DefaultValue { get => (T)(object)defaultValue; set => defaultValue = (int)(object)value; }
         public virtual T Value { get => (T)(object)content; set => content = (int)(object)value; }

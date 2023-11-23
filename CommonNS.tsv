@@ -1,0 +1,19 @@
+Term	Notes	English
+CommonNS_descript_nosave		Current save has no data from this mod or there is no current save.
+CommonNS_descript_casual		Current save uses the setting above.
+CommonNS_descript_broken		Current save uses the setting above due to bad formatting of the save data in the file.
+CommonNS_descript_disabled		Current save disables this mod. Enemy Strength Modifier is 100% for this save.
+CommonNS_descript_tournament		Current save is in tournament mode with Enemy Strength Modifier set to [percentage]%.
+CommonNS_settings_Casual		<size=25>Casual</size>
+CommonNS_settings_Tournament		<size=25>Tournament</size>
+CommonNS_settings_Disabled		<size=25>Disabled</size>
+CommonNS_settings_Tampered		<size=25>Casual</size>
+CommonNS_reset		Reset Defaults
+CommonNS_reset_tooltip		Reset the options here to their default values
+CommonNS_clearsave_text		Save file updated.
+CommonNS_clearsave		Click here to remove mod options from current save file.
+CommonNS_savecleared		Current save file is set to: 
+CommonNS_modal_title		Clear Current Save
+CommonNS_modal_text		Are you sure you want to remove this Mod's option data from the current save file?
+CommonNS_tournament		New Save Mode
+CommonNS_tournament_tooltip		<b><i>When a new game is created</i></b>, New Save Mode determines if MOD Options are written#to the save file. Existing games containing no save data are treated as <b>Casual</b> games.##<b>Tournament</b> (or On) writes the MOD Options to the save file. <b>Tournament</b> save#     files ignore the <b>Disabled</b> setting.#<b>Casual</b> (or Off) does not write to the save file at all. The MOD Options can be changed#     between gaming sessions. <b>Casual</b> save files are affected by the <b>Disabled</b> option.#<b>Disabled</b> writes the default settings to the save file and uses them in lieu of the#     current MOD Options.

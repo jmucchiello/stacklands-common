@@ -16,11 +16,11 @@ namespace CommonModNS
             try
             {
                 List<PatchHelper> list = new List<PatchHelper>();
-                if (GetSaveRound?.GetInvocationList().Length > 0) list.Add(new PatchHelper() { targetType = typeof(WorldManager), targetMethod = "GetSaveRound", patchMethod = "WorldManager_GetSaveRound" });
-                if (LoadSaveRound?.GetInvocationList().Length > 0) list.Add(new PatchHelper() { targetType = typeof(WorldManager), targetMethod = "LoadSaveRound", patchMethod = "WorldManager_LoadSaveRound" });
-                if (StartNewRound?.GetInvocationList().Length > 0) list.Add(new PatchHelper() { targetType = typeof(WorldManager), targetMethod = "StartNewRound", patchMethod = "WorldManager_StartNewRound" });
-                if (Update?.GetInvocationList().Length > 0) list.Add(new PatchHelper() { targetType = typeof(WorldManager), targetMethod = "Update", patchMethod = "WorldManager_Update" });
-                if (Play?.GetInvocationList().Length > 0) list.Add(new PatchHelper() { targetType = typeof(WorldManager), targetMethod = "Play", patchMethod = "WorldManager_Play" });
+                if (GetSaveRound?.GetInvocationList().Length > 0) list.Add(new PatchHelper(typeof(WorldManager), "GetSaveRound", "WorldManager_GetSaveRound"));
+                if (LoadSaveRound?.GetInvocationList().Length > 0) list.Add(new PatchHelper(typeof(WorldManager), "LoadSaveRound", "WorldManager_LoadSaveRound"));
+                if (StartNewRound?.GetInvocationList().Length > 0) list.Add(new PatchHelper(typeof(WorldManager), "StartNewRound", "WorldManager_StartNewRound"));
+                if (Update?.GetInvocationList().Length > 0) list.Add(new PatchHelper(typeof(WorldManager), "Update", "WorldManager_Update"));
+                if (Play?.GetInvocationList().Length > 0) list.Add(new PatchHelper(typeof(WorldManager), "Play", "WorldManager_Play"));
 
                 foreach (PatchHelper patch in list)
                 {
@@ -33,12 +33,12 @@ namespace CommonModNS
             }
         }
 
-        internal class PatchHelper
+        internal class PatchHelper(Type type, string target, string patch)
         {
-            public Type targetType;
-            public string targetMethod;
-            public string patchMethod;
-            private bool patched;
+            public readonly Type targetType = type;
+            public readonly string targetMethod = target;
+            public readonly string patchMethod = patch;
+            private bool patched = false;
 
             public void Patch(Harmony harmony)
             {
@@ -53,36 +53,26 @@ namespace CommonModNS
             }
         }
 
-        //[HarmonyPatch(typeof(WorldManager), nameof(WorldManager.GetSaveRound))]
-        //[HarmonyPostfix]
         static void WorldManager_GetSaveRound(WorldManager __instance, ref SaveRound __result)
         {
             GetSaveRound?.Invoke(__instance, __result);
         }
 
-        //[HarmonyPatch(typeof(WorldManager), nameof(WorldManager.LoadSaveRound))]
-        //[HarmonyPostfix]
         static void WorldManager_LoadSaveRound(WorldManager __instance, SaveRound saveRound)
         {
             LoadSaveRound?.Invoke(__instance, saveRound);
         }
 
-        //[HarmonyPatch(typeof(WorldManager), nameof(WorldManager.LoadSaveRound))]
-        //[HarmonyPostfix]
         static void WorldManager_StartNewRound(WorldManager __instance)
         {
             StartNewRound?.Invoke(__instance);
         }
 
-        //[HarmonyPatch(typeof(WorldManager), nameof(WorldManager.Update))]
-        //[HarmonyPostfix]
         static void WorldManager_Update(WorldManager __instance)
         {
             Update?.Invoke(__instance);
         }
 
-        //[HarmonyPatch(typeof(WorldManager), nameof(WorldManager.Play))]
-        //[HarmonyPostfix]
         static void WorldManager_Play(WorldManager __instance)
         {
             Play?.Invoke(__instance);

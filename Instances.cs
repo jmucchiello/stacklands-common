@@ -41,6 +41,11 @@ namespace CommonModNS
             return null;
         }
 
+        public static LocParam Param(string termId, string value)
+        {
+            return LocParam.Create(termId, value);
+        }
+
         private static MethodInfo log;
 
         /**

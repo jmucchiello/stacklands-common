@@ -5,7 +5,6 @@ namespace CommonModNS
     public class ConfigToggledEnum<T> : ConfigEntryHelper where T : Enum
     {
         private int content; // access via BoxedValue
-        private int defaultValue; // access via BoxedValue
         private string[] EnumNames = new string[0];
         private CustomButton anchor;  // this holds the ModOptionsScreen text that is clicked to open the menu
 
@@ -33,7 +32,8 @@ namespace CommonModNS
             }
         }
 
-        public virtual T DefaultValue { get => (T)(object)defaultValue; set => defaultValue = (int)(object)value; }
+        private readonly int defaultValue; // access via BoxedValue
+        public virtual T DefaultValue { get => (T)(object)defaultValue; }
         public virtual T Value { get => (T)(object)content; set => content = (int)(object)value; }
 
         public override object BoxedValue
@@ -47,7 +47,7 @@ namespace CommonModNS
             Name = name;
             EnumNames = EnumHelper.GetNames<T>().ToArray();
             ValueType = typeof(object); // to avoid shenanigans from ModOptionScreen's default processing of string/int/bool
-            DefaultValue = defaultValue;
+            this.defaultValue = (int)(object)defaultValue;
             Config = configFile;
             BoxedValue = LoadConfigEntry<int>(name, (int)(object)defaultValue);
 

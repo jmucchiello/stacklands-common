@@ -40,10 +40,11 @@ namespace CommonModNS
         public delegate void OnQuickButton(string text);
         public OnQuickButton onQuickButton;
 
+        public Action<int> OnValueChanged;
+
         public Color currentValueColor = Color.black;
 
         private SliderGameObject SGO = null;
-        private Action<int> OnValueChanged;
         private bool InclHeading { get => Heading != null || HeadingTerm != null; }
 
         public string HeadingTerm, Heading;
@@ -51,7 +52,7 @@ namespace CommonModNS
         /**
          *  
          **/
-        public ConfigSlider(string name, ConfigFile config, Action<int> OnChange, int lowerBound, int upperBound, int step = 1, int defValue = 0)
+        public ConfigSlider(string name, ConfigFile config, int lowerBound, int upperBound, int step = 1, int defValue = 0)
         {
             if (lowerBound == upperBound || step == 0) throw new ArgumentException("LowerBound cannot equal UpperBound. Step cannot be zero.");
 
@@ -62,7 +63,6 @@ namespace CommonModNS
             LowerBound = lowerBound;
             UpperBound = upperBound;
             Step = step;
-            OnValueChanged += OnChange;
 
             DefaultValue = Math.Clamp(defValue, lowerBound, upperBound);
             Value = LoadConfigEntry<int>(name, defValue);
@@ -127,7 +127,6 @@ namespace CommonModNS
 
     }
 
-    [HarmonyPatch]
     public class SliderGameObject
     {
         public delegate void OnChangeFunc(float value);

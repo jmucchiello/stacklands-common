@@ -5,7 +5,6 @@ namespace CommonModNS
     public class ConfigEntryBool : ConfigEntryHelper 
     {
         private bool content = true; // access via BoxedValue
-        private bool DefaultValue; // access via BoxedValue
         private CustomButton anchor;  // this holds the ModOptionsScreen text that is clicked to open the menu
 
         public delegate string OnDisplayText();
@@ -16,22 +15,17 @@ namespace CommonModNS
         public OnChangeCall OnChange;
 
         public Color currentValueColor = Color.black;
+        public int TextSize = 0;
 
         public bool Value {
-            get {
-                return content;
-            }
-            set
-            {
-                content = value;
-            }
+            get => content;
+            set => content = value;
         }
-
-        public override object BoxedValue
-        {
+        public override object BoxedValue {
             get => content;
             set => content = (bool)value;
         }
+        private readonly bool DefaultValue;
 
         public ConfigEntryBool(string name, ConfigFile configFile, bool defaultValue, ConfigUI ui = null)
         {
@@ -78,9 +72,11 @@ namespace CommonModNS
 
         public virtual string GetDisplayText()
         {
-            return onDisplayText?.Invoke() ?? UI.GetName()
-                 + ": "
-                 + ColorText(currentValueColor, I.Xlat(content ? "label_on" : "label_off"));
+            string text = onDisplayText?.Invoke() ?? UI.GetName()
+                        + ": "
+                        + ColorText(currentValueColor, I.Xlat(content ? SokTerms.label_on : SokTerms.label_off));
+            if (TextSize > 0) return SizeText(TextSize, text);
+            return text;
         }
         public virtual string GetDisplayTooltip()
         {

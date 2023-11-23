@@ -66,7 +66,7 @@ namespace CommonModNS
     {
         public override object BoxedValue { get => new object(); set => _ = value; }
 
-        public ConfigEmptySpace(ConfigFile Config)
+        public ConfigEmptySpace(ConfigFile Config, RectTransform parent)
         {
             Name = "__ConfigEmptySpace__";
             ValueType = typeof(object);
@@ -74,8 +74,8 @@ namespace CommonModNS
             {
                 Hidden = true,
                 OnUI = delegate {
-                    _ = UnityEngine.Object.Instantiate(I.MOS.SpacerPrefab, I.MOS.ButtonsParent);
-                    _ = UnityEngine.Object.Instantiate(I.MOS.SpacerPrefab, I.MOS.ButtonsParent);
+                    _ = UnityEngine.Object.Instantiate(I.MOS.SpacerPrefab, parent);
+                    _ = UnityEngine.Object.Instantiate(I.MOS.SpacerPrefab, parent);
                 }
             };
             Config.Entries.Add(this);
@@ -84,10 +84,12 @@ namespace CommonModNS
 
     public class ConfigResetDefaults : ConfigFreeText
     {
-        public ConfigResetDefaults(ConfigFile config, Action OnReset)
-            : base("reset", config, "savehelper_reset", "savehelper_reset_tooltip")
+        public Action OnReset;
+        public ConfigResetDefaults(ConfigFile config, Action onReset = null)
+            : base("reset", config, "CommonNS_reset", "CommonNS_reset_tooltip")
         {
             TextAlign = TextAlign.Right;
+            OnReset = onReset;
             Clicked += delegate (ConfigEntryBase _, CustomButton _) {
                 OnReset?.Invoke();
             };

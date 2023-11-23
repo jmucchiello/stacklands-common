@@ -10,8 +10,8 @@ namespace CommonModNS
         public ConfigTournament(string name, ConfigFile configFile, SaveSettingsMode defaultValue = SaveSettingsMode.Casual) 
             : base(name, configFile, defaultValue, new ConfigUI()
             {
-                NameTerm = "savehelper_tournament",
-                TooltipTerm = "savehelper_tournament_tooltip"
+                NameTerm = "CommonNS_tournament",
+                TooltipTerm = "CommonNS_tournament_tooltip"
             }, false)
         {
             currentValueColor = Color.blue;
@@ -25,11 +25,11 @@ namespace CommonModNS
             };
             onDisplayText = delegate ()
             {
-                return SizeText(25, I.Xlat("savehelper_tournament"));
+                return SizeText(25, I.Xlat("CommonNS_tournament"));
             };
             onDisplayEnumText = delegate (SaveSettingsMode value)
             {
-                return SizeText(25, I.Xlat($"savehelper_settings_{value}"));
+                return SizeText(25, I.Xlat($"CommonNS_settings_{value}"));
             };
         }
     }
@@ -37,7 +37,7 @@ namespace CommonModNS
     public class ConfigClearSave : ConfigFreeText
     {
         public ConfigClearSave(SaveHelper saveHelper, ConfigFile config) 
-            : base("clearsave", config, "savehelper_clearsave", "savehelper_clearsave_tooltip")
+            : base("clearsave", config, "CommonNS_clearsave", "CommonNS_clearsave_tooltip")
         {
             TextAlign = TextAlign.Left;
             OnUI = delegate (ConfigFreeText ccs, CustomButton _)
@@ -46,7 +46,7 @@ namespace CommonModNS
             };
             Clicked += delegate (ConfigEntryBase _, CustomButton _) {
                 I.Modal.Clear();
-                I.Modal.SetTexts(I.Xlat("savehelper_modal_title"), I.Xlat("savehelper_modal_text"));
+                I.Modal.SetTexts(I.Xlat("CommonNS_modal_title"), I.Xlat("CommonNS_modal_text"));
                 I.Modal.AddOption(I.Xlat(SokTerms.label_yes), () =>
                 {
                     GameCanvas.instance.CloseModal();
@@ -105,12 +105,13 @@ namespace CommonModNS
 
         public void Ready(string path)
         {
-            string locPath = Path.Combine(path, "savehelper.tsv");
+            string locPath = Path.Combine(path, "CommonNS.tsv");
             if (File.Exists(locPath))
             {
                 SokLoc.instance.LoadTermsFromFile(locPath);
             }
         }
+
         private string Construct(SecretData secrets, string payload)
         {
             List<string> strings = new List<string>();
@@ -207,15 +208,15 @@ namespace CommonModNS
             I.Log($"game {round} saveRoundKey {saveRoundKey} hash {hash}");
             if (hash == null || round == null)
             {
-                return I.Xlat("savehelper_descript_nosave");
+                return I.Xlat("CommonNS_descript_nosave");
             }
             (SaveSettingsMode mode, string payload) = Interpret(hash, new SecretData(round));
             return mode switch
             {
-                SaveSettingsMode.Casual => I.Xlat("savehelper_descript_casual"),
-                SaveSettingsMode.Disabled => I.Xlat("savehelper_descript_disabled"),
-                SaveSettingsMode.Tampered => I.Xlat("savehelper_descript_broken"),
-                _ => I.Xlat("savehelper_descript_tournament", LocParam.Create("percentage", payload))
+                SaveSettingsMode.Casual => I.Xlat("CommonNS_descript_casual"),
+                SaveSettingsMode.Disabled => I.Xlat("CommonNS_descript_disabled"),
+                SaveSettingsMode.Tampered => I.Xlat("CommonNS_descript_broken"),
+                _ => I.Xlat("CommonNS_descript_tournament", LocParam.Create("percentage", payload))
             };
         }
     }
