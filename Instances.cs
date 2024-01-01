@@ -38,7 +38,7 @@ namespace CommonModNS
             }
             StackTrace trace = new StackTrace();
             if (trace != null) Log($"{trace.GetFrame(1)?.GetMethod()}/{trace.GetFrame(2)?.GetMethod()}/{trace.GetFrame(3)?.GetMethod()}");
-            return null;
+            return "";
         }
 
         public static LocParam Param(string termId, string value)

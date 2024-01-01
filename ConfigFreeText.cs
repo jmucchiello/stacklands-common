@@ -6,6 +6,7 @@ namespace CommonModNS
     {
         public TextAlign TextAlign { get; set; } = TextAlign.Center;
         public Color TextColor { get; set; } = Color.black;
+        public int FontSize { get; set; } = 0;
         public string Text { get => Button?.TextMeshPro.text; set { if (Button != null) Button.TextMeshPro.text = ColorText(TextColor, AlignText(TextAlign, value)); } }
         public string Tooltip{ get => Button?.TooltipText; set { if (Button != null) Button.TooltipText = value; } }
         public override object BoxedValue { get => new object(); set => _ = value; }
@@ -49,7 +50,9 @@ namespace CommonModNS
 
         string GetText()
         {
-            return UI.NameTerm == null ? "---MISSING---" : ColorText(TextColor, AlignText(TextAlign, I.Xlat(UI.NameTerm)));
+            string text = UI.NameTerm == null ? "---MISSING---" : ColorText(TextColor, AlignText(TextAlign, I.Xlat(UI.NameTerm)));
+            if (FontSize > 0) text = SizeText(FontSize, text);
+            return text;
         }
         string GetTooltip()
         {

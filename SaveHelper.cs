@@ -105,10 +105,14 @@ namespace CommonModNS
 
         public void Ready(string path)
         {
-            string locPath = Path.Combine(path, "CommonNS.tsv");
-            if (File.Exists(locPath))
+            SokTerm t = SokLoc.instance.CurrentLocSet.GetTerm("CommonNS_reset") ?? SokLoc.FallbackSet.GetTerm("CommonNS_reset");
+            if (t == null)
             {
-                SokLoc.instance.LoadTermsFromFile(locPath);
+                string locPath = Path.Combine(path, "CommonNS.tsv");
+                if (File.Exists(locPath))
+                {
+                    SokLoc.instance.LoadTermsFromFile(locPath);
+                }
             }
         }
 

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using HarmonyLib;
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 namespace CommonModNS
@@ -22,5 +24,55 @@ namespace CommonModNS
             }
         }
 
+
+        private static List<Mod> FindMods()
+        {
+            List<Mod> mods = new();
+            foreach (Mod mod in ModManager.LoadedMods)
+            {
+                Type type = mod.GetType();
+                MethodInfo mi = AccessTools.Method(type, "ChallengeInit");
+                if (mi == null)
+                {
+                    I.Log($"{mod.name} does not implement ChallengeInit");
+                    continue;
+                }
+                try
+                {
+                    object ret = mi.Invoke(null, new object[0]);
+                    if (ret == null) continue;
+                    if (!(bool)ret) continue;
+
+                    mods.Add(mod);
+                }
+                catch (Exception ex)
+                {
+                    I.Log($"Invoking {mod.name}.ChallengeInit() threw {ex.Message}");
+                }
+            }
+            return mods;
+        }
+
+        private static void Invoke(string function, params object[] args)
+        {
+            foreach (Mod mod in FindMods())
+            {
+                Type type = mod.GetType();
+                MethodInfo mi = AccessTools.Method(type, function);
+                if (mi == null)
+                {
+                    I.Log($"{mod.name} does not implement {function}");
+                    continue;
+                }
+                try
+                {
+                    mi.Invoke(null, args);
+                }
+                catch (Exception ex)
+                {
+                    I.Log($"Invoking {mod.name}.{function}() threw {ex.Message}\n{ex.StackTrace}");
+                }
+            }
+        }
     }
 }

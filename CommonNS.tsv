@@ -15,5 +15,11 @@ CommonNS_clearsave		Click here to remove mod options from current save file.
 CommonNS_savecleared		Current save file is set to: 
 CommonNS_modal_title		Clear Current Save
 CommonNS_modal_text		Are you sure you want to remove this Mod's option data from the current save file?
-CommonNS_tournament		New Save Mode
-CommonNS_tournament_tooltip		<b><i>When a new game is created</i></b>, New Save Mode determines if MOD Options are written#to the save file. Existing games containing no save data are treated as <b>Casual</b> games.##<b>Tournament</b> (or On) writes the MOD Options to the save file. <b>Tournament</b> save#     files ignore the <b>Disabled</b> setting.#<b>Casual</b> (or Off) does not write to the save file at all. The MOD Options can be changed#     between gaming sessions. <b>Casual</b> save files are affected by the <b>Disabled</b> option.#<b>Disabled</b> writes the default settings to the save file and uses them in lieu of the#     current MOD Options.
+CommonNS_challenge_label		Challenge Mode Settings
+CommonNS_challenge_tooltip		The Mod Options below are saved to the new save game.#Setttings within the mod are ignored for the run of the game.
+CommonNS_challenge_SAVE		Save
+CommonNS_challenge_DONTSAVE		Don't#Save
+CommonNS_challenge_save_tooltip		Set to "Don't Save" is you don't want this setting saved as part of the run.
+CommonNS_tournament		Challenge Mode
+CommonNS_tournament_tooltip		<b><i>When a new game is created</i></b>, if this option is set to Enabled,#certain mod options will appear on the Run Options Screen. When set#there, they are stored with the new game and when that game is run,#those same settings here are ignored.
+CommonNS_runopts_save_tooltip		Click to enable or disable this mod's options in your new game

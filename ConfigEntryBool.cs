@@ -15,7 +15,7 @@ namespace CommonModNS
         public OnChangeCall OnChange;
 
         public Color currentValueColor = Color.black;
-        public int TextSize = 0;
+        public int FontSize = 0;
 
         public bool Value {
             get => content;
@@ -75,7 +75,7 @@ namespace CommonModNS
             string text = onDisplayText?.Invoke() ?? UI.GetName()
                         + ": "
                         + ColorText(currentValueColor, I.Xlat(content ? SokTerms.label_on : SokTerms.label_off));
-            if (TextSize > 0) return SizeText(TextSize, text);
+            if (FontSize > 0) return SizeText(FontSize, text);
             return text;
         }
         public virtual string GetDisplayTooltip()
