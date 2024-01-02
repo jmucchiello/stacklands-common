@@ -117,7 +117,17 @@ namespace CommonModNS
 
         public Action<RunoptsBase> OnStart;
 
-        public bool Enabled { get => enabled; set { enabled = value; SetText(); } }
+        public bool Enabled {
+            get {
+                //I.Log($"{NameTerm} get Enabled = {enabled}");
+                return enabled;
+            }
+            set { 
+                enabled = value;
+                //I.Log($"{NameTerm} set Enabled = {enabled}");
+                SetText(); 
+            } 
+        }
         private bool enabled = true;
 
         public abstract object BoxedValue { get; set; }
@@ -186,6 +196,7 @@ namespace CommonModNS
                 string label = I.Xlat(NameTerm);
                 string value = $"<color=#{ColorUtility.ToHtmlStringRGBA(FontColor)}>" + I.Xlat($"{EnumTermPrefix}{Value}") + "</color>";
                 string text = label + ": " + value;
+                if (!Enabled) text = "<s>" + text + "</s>";
                 if (FontSize > 0) text = $"<size={FontSize}>" + text + "</size>";
                 Label.TextMeshPro.text = text;
             }
