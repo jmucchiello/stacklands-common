@@ -5,62 +5,6 @@ namespace CommonModNS
 {
     public enum SaveSettingsMode { Tournament, Casual, Disabled, Tampered }
 
-    public class ConfigTournament : ConfigToggledEnum<SaveSettingsMode>
-    {
-        public ConfigTournament(string name, ConfigFile configFile, SaveSettingsMode defaultValue = SaveSettingsMode.Casual) 
-            : base(name, configFile, defaultValue, new ConfigUI()
-            {
-                NameTerm = "CommonNS_tournament",
-                TooltipTerm = "CommonNS_tournament_tooltip"
-            }, false)
-        {
-            currentValueColor = Color.blue;
-            onChange = delegate (SaveSettingsMode value) {
-                if (value == SaveSettingsMode.Tampered)
-                {
-                    Value = (SaveSettingsMode)0;
-                    return false;
-                }
-                return true;
-            };
-            onDisplayText = delegate ()
-            {
-                return SizeText(25, I.Xlat("CommonNS_tournament"));
-            };
-            onDisplayEnumText = delegate (SaveSettingsMode value)
-            {
-                return SizeText(25, I.Xlat($"CommonNS_settings_{value}"));
-            };
-        }
-    }
-
-    public class ConfigClearSave : ConfigFreeText
-    {
-        public ConfigClearSave(SaveHelper saveHelper, ConfigFile config) 
-            : base("clearsave", config, "CommonNS_clearsave", "CommonNS_clearsave_tooltip")
-        {
-            TextAlign = TextAlign.Left;
-            OnUI = delegate (ConfigFreeText ccs, CustomButton _)
-            {
-                ccs.Text = ConfigEntryHelper.SizeText(20, saveHelper.DescribeCurrentSave());
-            };
-            Clicked += delegate (ConfigEntryBase _, CustomButton _) {
-                I.Modal.Clear();
-                I.Modal.SetTexts(I.Xlat("CommonNS_modal_title"), I.Xlat("CommonNS_modal_text"));
-                I.Modal.AddOption(I.Xlat(SokTerms.label_yes), () =>
-                {
-                    GameCanvas.instance.CloseModal();
-                    saveHelper.ClearCurrentSave();
-                    Text = ConfigEntryHelper.SizeText(20, saveHelper.DescribeCurrentSave());
-                });
-                I.Modal.AddOption(I.Xlat(SokTerms.label_no), () =>
-                {
-                    GameCanvas.instance.CloseModal();
-                });
-                GameCanvas.instance.OpenModal();
-            };
-        }
-    }
 
     internal struct SecretData
     {
@@ -84,7 +28,10 @@ namespace CommonModNS
         }
     }
 
-    public class SaveHelper
+    public interface ISaveData
+    { }
+
+    public class SaveHelperBase<T>  where T : ISaveData
     {
         private readonly string saveRoundKey;
         private readonly string oldSaveRoundKey = null;
@@ -97,7 +44,7 @@ namespace CommonModNS
         public delegate string OnGetSettings();
         public OnGetSettings onGetSettings;
 
-        public SaveHelper(string modName)
+        public SaveHelperBase(string modName)
         {
             saveRoundKey = modName + "_save";
             salt = (Environment.MachineName ?? "") + "?" + modName;
@@ -167,7 +114,7 @@ namespace CommonModNS
             string payload = SettingsMode switch
             {
                 SaveSettingsMode.Casual => SettingsStatus_casual,
-                SaveSettingsMode.Disabled => SettingsStatus_disabled,
+                SaveSettingsMode.Disabled => Construct(secret, SettingsStatus_disabled),
                 SaveSettingsMode.Tournament => Construct(secret, onGetSettings?.Invoke()),
                 _ => SettingsStatus_broken,
             };
