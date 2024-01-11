@@ -221,7 +221,7 @@ namespace CommonModNS
 
         public readonly int DefaultValue;
         public override object BoxedValue { get => Value; set => Value = (int)value; }
-        private readonly IntNormalization norm;
+        private readonly IntRangeNormalization norm;
 
         public RunoptsSlider(string LabelTerm, int defaultValue, int lowerBound, int upperBound, int step) : base(LabelTerm)
         {

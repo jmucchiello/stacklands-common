@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 namespace CommonModNS
 {
-    public class IntNormalization
+    public class IntRangeNormalization
     {
         public readonly int LowerBound, UpperBound, Step;
-        public IntNormalization(int lowerBound, int upperBound, int step)
+        public IntRangeNormalization(int lowerBound, int upperBound, int step)
         {
             if (lowerBound == upperBound || step == 0) throw new ArgumentException("LowerBound cannot equal UpperBound. Step cannot be zero.");
             if (lowerBound > upperBound && step > 0) (lowerBound, upperBound) = (upperBound, lowerBound); // swap
@@ -23,7 +23,7 @@ namespace CommonModNS
 
         public int Convert(float value)
         {
-            return (int)(Clamp(value) * (UpperBound - LowerBound) + Step/2)/ Step * Step + LowerBound;
+            return (int)(Clamp(value) * (UpperBound - LowerBound) + (float)Step/2.0)/ Step * Step + LowerBound;
         }
 
         public float Convert(int value)
@@ -38,7 +38,7 @@ namespace CommonModNS
         public int Value { 
             get => setting;
             set {
-                setting = Math.Clamp(value, LowerBound, UpperBound);
+                setting = normalizer.Clamp(value);
                 Config.Data[Name] = setting;
                 if (SGO != null)
                 {
@@ -51,20 +51,20 @@ namespace CommonModNS
         public readonly int DefaultValue;
 
         private int setting;
-        private readonly IntNormalization norm;
+        private readonly IntRangeNormalization normalizer;
         private float ToFloat(int value)
         {
-            return norm.Convert(value);
+            return normalizer.Convert(value);
         }
         private int ToInt(float value)
         {
-            return norm.Convert(value);
+            return normalizer.Convert(value);
         }
 
         //public float minimumDelta { get => (float)Step / (UpperBound - LowerBound) / 2; }
-        public int LowerBound { get => norm.LowerBound; }
-        public int UpperBound { get => norm.UpperBound; }
-        public int Step { get => norm.Step; }
+        public int LowerBound { get => normalizer.LowerBound; }
+        public int UpperBound { get => normalizer.UpperBound; }
+        public int Step { get => normalizer.Step; }
 
         public readonly List<string> QuickButtons = new List<string>();
         public int QuickButtonSize = 20;
@@ -85,14 +85,14 @@ namespace CommonModNS
          **/
         public ConfigSlider(string name, ConfigFile config, int lowerBound, int upperBound, int step = 1, int defValue = 0)
         {
-            norm = new(lowerBound, upperBound, step);
+            normalizer = new(lowerBound, upperBound, step);
 
             Name = name;
             Config = config;
             ValueType = typeof(int);
 
             DefaultValue = Math.Clamp(defValue, lowerBound, upperBound);
-            Value = LoadConfigEntry<int>(name, defValue);
+            Value = LoadConfigEntry<int>(name, DefaultValue);
 
             UI = new ConfigUI()
             {
