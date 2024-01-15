@@ -19,11 +19,17 @@ namespace CommonModNS
 
         public bool Value {
             get => content;
-            set => content = value;
+            set {
+                content = value;
+                Update();
+            }
         }
         public override object BoxedValue {
             get => content;
-            set => content = (bool)value;
+            set {
+                content = (bool)value;
+                Update();
+            }
         }
         private readonly bool DefaultValue;
 
@@ -66,8 +72,11 @@ namespace CommonModNS
 
         public void Update()
         {
-            anchor.TextMeshPro.text = GetDisplayText();
-            anchor.TooltipText = GetDisplayTooltip();
+            if (anchor != null)
+            {
+                anchor.TextMeshPro.text = GetDisplayText();
+                anchor.TooltipText = GetDisplayTooltip();
+            }
         }
 
         public virtual string GetDisplayText()
